@@ -1,3 +1,6 @@
+#!/usr/local/bin/python3.9
+#coding:utf-8
+
 import logging
 from dingtalkchatbot.chatbot import DingtalkChatbot
 logging.basicConfig(
@@ -91,24 +94,25 @@ def analyze_news_content(item):
 
 def send_news_content(item):
     """发送公告内容 """
-    webhook = 'https://oapi.dingtalk.com/robot/send?access_token=5fc5d5cfa6550becb02f034d4fbd671195b6cf01ffac95dc84d48ed1e290a63c'
-    secret = 'SEC5bd576db83cdfcde42021b642dbf68458aa1e7b0eb21a3ec018145566cba0f90'
-    bot = DingtalkChatbot(webhook, secret=secret)
-    msg_temple = '# 人民币汇率中间价公告\n\n' \
-                 '{}' \
-                 '###### {}发布 [点击查看]({})'
-    exchange_rate_str = ''
-    for exchange_rate in item.exchange_rate_list:
-        exchange_rate_str = exchange_rate_str + "" + exchange_rate.source_num + exchange_rate.source + '=' \
-              + exchange_rate.target_num + exchange_rate.target + '\n\n'
-    msg = msg_temple.format(exchange_rate_str, item.news_time, item.url)
-    bot.send_markdown(
-        title=item.title,
-        text=msg
-    )
+    if FLAGS.secret is not None and FLAGS.access_token is not None:
+        webhook = 'https://oapi.dingtalk.com/robot/send?access_token={}'.format(FLAGS.access_token)
+        secret = FLAGS.secret
+        bot = DingtalkChatbot(webhook, secret=secret)
+        msg_temple = '# 人民币汇率中间价公告\n\n' \
+                     '{}' \
+                     '###### {}发布 [点击查看]({})'
+        exchange_rate_str = ''
+        for exchange_rate in item.exchange_rate_list:
+            exchange_rate_str = exchange_rate_str + "" + exchange_rate.source_num + exchange_rate.source + '=' \
+                  + exchange_rate.target_num + exchange_rate.target + '\n\n'
+        msg = msg_temple.format(exchange_rate_str, item.news_time, item.url)
+        bot.send_markdown(
+            title=item.title,
+            text=msg
+        )
 
 
-def main(FLAGS):
+def main():
     # 如果只抓取最新的一条,只取第一页
     if FLAGS.single == 1:
         FLAGS.num_pages = 1
@@ -136,8 +140,10 @@ def main(FLAGS):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='从中国人民银行网站抓取货币政策司的人民币汇率中间价公告')
-    parser.add_argument('--num_pages', type=int, default=10, help='抓取多少页的公告')
-    parser.add_argument('--time_interval', type=float, default=0.5, help='两次抓取间隔的秒数')
+    parser.add_argument('--num_pages', type=int, default=10, help='抓取多少页的公告,默认为10')
+    parser.add_argument('--time_interval', type=float, default=0.5, help='两次抓取间隔的秒数,默认为0.5')
     parser.add_argument('--single', type=int, default=1, help='是否只抓取最新的一条,1为true,此时忽略--num_pages参数')
+    parser.add_argument('--access_token', type=str, help='发送钉钉消息的参数,access_token,不填不发钉钉消息')
+    parser.add_argument('--secret', type=str, help='发送钉钉消息的参数,secret,不填不发钉钉消息')
     FLAGS = parser.parse_args()
-    main(FLAGS)
+    main()

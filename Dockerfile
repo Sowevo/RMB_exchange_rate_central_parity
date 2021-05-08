@@ -56,4 +56,4 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
 
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD [ "python3", "/app/crawl.py"]
+ENTRYPOINT [ "python3", "/app/crawl.py"]
