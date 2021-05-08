@@ -1,0 +1,2 @@
+# RMB_exchange_rate_central_parity
+人民币汇率中间价
