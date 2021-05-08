@@ -24,6 +24,6 @@
   - 拉取镜像`docker pull sowevo/rmb_exchange_rate_central_parity:latest`
   - 启动容器
     ```shell
-    $ docker run --rm rmb_exchange_rate_central_parity --access_token=5fc5d5cfa6550becb02f034d4fbd671195b6cf01ffac95dc84d48ed1e290a63c --secret=SEC82c0cc25ccdff88c9c559b505fc08540e9a145991d4c76a177bb09480842ba5e
+    $ docker run --rm sowevo/rmb_exchange_rate_central_parity --access_token=5fc5d5cfa6550becb02f034d4fbd671195b6cf01ffac95dc84d48ed1e290a63c --secret=SEC82c0cc25ccdff88c9c559b505fc08540e9a145991d4c76a177bb09480842ba5e
     ```
 
