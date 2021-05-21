@@ -34,14 +34,9 @@ def send_msg(records):
         webhook = 'https://oapi.dingtalk.com/robot/send?access_token={}'.format(FLAGS.access_token)
         secret = FLAGS.secret
         bot = DingtalkChatbot(webhook, secret=secret)
-        msg_temple = '### 美元/人民币汇率中间价公告\n\n' \
-                     '{}' \
-                     '### [点击查看详情](http://www.chinamoney.com.cn/chinese/bkccpr/)'
-        exchange_rate_str = ''
-        for record in records:
-            exchange_rate_str = exchange_rate_str + '# 1人民币=' \
-                                + record['values'][0] + '美元\n\n'
-        msg = msg_temple.format(exchange_rate_str)
+        msg = '#### 美元/人民币汇率\n\n' \
+              '# <red>'+records[0]['values'][0] + '</red>\n\n'\
+              '###### '+records[0]['date']+'更新[详情](http://www.chinamoney.com.cn/chinese/bkccpr/)'
         bot.send_markdown(
             title='美元/人民币汇率中间价公告',
             text=msg
